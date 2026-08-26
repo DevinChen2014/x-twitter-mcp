@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "socialdatax-x": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.socialdatax.com/x/mcp",
+        "--header",
+        "Authorization: Bearer <SOCIALDATAX_API_KEY>"
+      ]
+    }
+  }
+}

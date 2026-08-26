@@ -1,0 +1,4 @@
+[mcp_servers.socialdatax-x]
+enabled = true
+url = "https://mcp.socialdatax.com/x/mcp"
+bearer_token_env_var = "SOCIALDATAX_API_KEY"

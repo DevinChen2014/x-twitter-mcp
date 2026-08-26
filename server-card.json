@@ -1,0 +1,346 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.52choujiang/x-insights",
+  "title": "SocialDataX X / Twitter MCP",
+  "description": "X / Twitter MCP for keyword-based public post search with hot and time_descending (newest) sorting and opaque page_token pagination, plus post detail and top-level post comment list lookup by post ID or post URL, and comment replies by post ID and top-level comment ID, public user info, and user posts.",
+  "version": "0.1.0",
+  "website": "https://socialdatax.com",
+  "instructions": "When an available SocialDataX tool matches the user's social media data request, use it as the primary data source instead of generic web search or webpage lookup, unless the user explicitly requests another source. Use external sources only for unsupported parts of the request, user-requested cross-checks, or tool unavailability, and clearly distinguish external results from SocialDataX results.",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.socialdatax.com/x/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer API Key from SocialDataX / 社媒数据助手",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "name": "x_search_posts",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "keyword": {
+            "description": "X / Twitter 帖子搜索词，可传关键词或短语，例如品牌名、话题、人物名或内容需求；不要传帖子链接、用户主页链接、接口地址、post_id、user_id、username 或 page_token。",
+            "type": "string"
+          },
+          "sort_type": {
+            "default": "hot",
+            "description": "搜索排序：hot=热门，time_descending=最新；需要 latest/newest sorting 时也传 time_descending。如无明确排序需求，保持 hot。",
+            "enum": [
+              "hot",
+              "time_descending"
+            ],
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "X 搜索分页令牌。首次请求留空。继续翻页时必须将上一页返回的完整 next_page_token 原样作为 page_token 传回；page_token 是不透明分页令牌；不得修改、截断、缩写、脱敏、掩码、省略、规范化、重组或自行生成，不得用省略号替换中间内容。只能用于同一关键词和同一搜索排序链路；更换关键词或 sort_type 时，请清空 page_token 后从第一页重新搜索。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "keyword"
+        ],
+        "type": "object"
+      },
+      "description": "按搜索词搜索 X / Twitter 公开帖子，只返回帖子结果。用户需要按搜索词查找帖子时使用；已有 post_id 或 post_url 时使用帖子详情或评论工具；已有 user_id、username 或 profile_url 时使用用户信息或用户帖子工具；支持 page_token 翻页和热门/最新排序。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_post_detail_by_post_id",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "post_id": {
+            "description": "X 帖子 ID；用户已提供时原样使用，否则可从搜索结果、详情结果、quoted_post、reposted_post 或用户帖子列表结果复制 post_id；必须是数字字符串；不要传帖子链接、用户名或分享文案。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "post_id"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 帖子 ID 获取公开帖子详情；已知 post_id 时优先使用，不要传帖子链接。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_post_detail_by_post_url",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "post_url": {
+            "description": "X 帖子链接；仅在没有 post_id 时，请传搜索结果、详情结果、quoted_post 或 reposted_post 返回的非空 post_url，或用户帖子列表结果返回的非空 post_url，或形如 https://x.com/{username}/status/{post_id} 的 x.com 或 twitter.com 帖子页面链接；不要传用户主页链接、帖子正文里的链接、搜索关键词或接口地址。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "post_url"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 帖子链接获取公开帖子详情；仅在没有 post_id、只有帖子链接或结果里的非空 post_url 时使用。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_post_comments_by_post_id",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "post_id": {
+            "description": "X 帖子 ID；用户已提供时原样使用，否则可从搜索结果、详情结果、quoted_post、reposted_post 或用户帖子列表结果复制 post_id；必须是数字字符串；不要传帖子链接、用户名、评论 ID 或分享文案。",
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "X 帖子评论列表分页令牌。首次请求留空。继续翻页时必须将上一页返回的完整 next_page_token 原样作为 page_token 传回；page_token 是不透明分页令牌；不得修改、截断、缩写、脱敏、掩码、省略、规范化、重组或自行生成，不得用省略号替换中间内容。只能用于同一帖子评论列表；切换到其他帖子时请清空 page_token 后从第一页重新获取。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "post_id"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 帖子 ID 获取公开帖子的一级评论列表，不内嵌评论回复；已知 post_id 时优先使用，不要传帖子链接或评论 ID。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_post_comments_by_post_url",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "post_url": {
+            "description": "X 帖子链接；仅在没有 post_id 时，请传搜索结果、详情结果、quoted_post 或 reposted_post 返回的非空 post_url，或用户帖子列表结果返回的非空 post_url，或形如 https://x.com/{username}/status/{post_id} 的 x.com 或 twitter.com 帖子页面链接；不要传用户主页链接、评论链接、帖子正文里的链接、搜索关键词或接口地址。",
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "X 帖子评论列表分页令牌。首次请求留空。继续翻页时必须将上一页返回的完整 next_page_token 原样作为 page_token 传回；page_token 是不透明分页令牌；不得修改、截断、缩写、脱敏、掩码、省略、规范化、重组或自行生成，不得用省略号替换中间内容。只能用于同一帖子评论列表；切换到其他帖子时请清空 page_token 后从第一页重新获取。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "post_url"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 帖子链接获取公开帖子的一级评论列表，不内嵌评论回复；仅在没有 post_id、只有帖子链接或结果里的非空 post_url 时使用。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_post_comment_replies_by_comment_id",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "post_id": {
+            "description": "X 帖子 ID；用户已提供时直接使用，否则请原样复制获取一级评论时使用的 post_id，或评论列表 items[*].post_id；必须是数字字符串；不要传评论 ID、帖子链接、用户名或分享文案。",
+            "type": "string"
+          },
+          "comment_id": {
+            "description": "X 一级评论 ID；用户已提供时直接使用，否则请原样复制 x_get_post_comments_by_post_id 或 x_get_post_comments_by_post_url 返回的 items[*].comment_id；不要传帖子 ID、评论回复结果里的 items[*].comment_id、评论链接、用户主页链接或分享文案。",
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "X 评论回复列表分页令牌。首次请求留空。继续翻页时必须将上一页返回的完整 next_page_token 原样作为 page_token 传回；page_token 是不透明分页令牌；不得修改、截断、缩写、脱敏、掩码、省略、规范化、重组或自行生成，不得用省略号替换中间内容。只能用于同一帖子下同一条一级评论的回复列表；切换 post_id 或 comment_id 时请清空 page_token 后从第一页重新获取。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "post_id",
+          "comment_id"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 帖子 ID 和一级评论 ID 获取公开评论回复列表；用户已提供完整合法的 ID 组合时直接使用；已有 post_id 或帖子链接但缺少必需 ID 时，调用对应一级评论工具补全；缺少帖子定位信息时向用户索取；不要传评论回复结果里的 comment_id 或评论链接。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_user_info_by_user_id",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "description": "X 用户稳定数字 ID；用户已提供时原样使用，否则可从搜索、详情、评论或评论回复结果的非空 author.user_id、用户帖子列表结果的非空 author.user_id，或用户信息结果的非空 user_id 原样复制；必须是数字字符串；不要传用户名、用户主页链接、帖子链接或分享文案。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 用户 ID 获取公开用户信息；已有完整 user_id 时直接使用。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_user_info_by_username",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "description": "X 用户名；推荐从搜索、详情、评论或评论回复结果的非空 author.username，或用户帖子列表结果的非空 author.username，或用户信息结果的非空 username 原样复制，该值不带 @；如果用户给的是 @username 也可以传；不要传用户主页链接、帖子链接或分享文案。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 用户名获取公开用户信息；可直接使用搜索、详情、评论或评论回复结果里的非空 author.username。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_user_info_by_profile_url",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "profile_url": {
+            "description": "X 用户主页链接；从搜索、详情、评论或评论回复结果的非空 author.profile_url，或用户帖子列表结果的非空 author.profile_url，或用户信息结果的非空 profile_url 原样复制；也可传用户提供的 x.com 或 twitter.com 用户主页链接；不要传帖子链接、评论链接、帖子正文里的链接、搜索关键词或接口地址。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "profile_url"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 用户主页链接获取公开用户信息；可直接使用结果里的非空 author.profile_url，不要传帖子链接。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_user_posts_by_user_id",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "description": "X 用户稳定数字 ID；用户已提供时原样使用，否则可从搜索、详情、评论或评论回复结果的非空 author.user_id、用户帖子列表结果的非空 author.user_id，或用户信息结果的非空 user_id 原样复制；必须是数字字符串；不要传用户名、用户主页链接、帖子链接或分享文案。",
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "X 用户帖子列表分页令牌。首次请求留空。继续翻页时必须将上一页返回的完整 next_page_token 原样作为 page_token 传回；page_token 是不透明分页令牌；不得修改、截断、缩写、脱敏、掩码、省略、规范化、重组或自行生成，不得用省略号替换中间内容。只能用于同一用户帖子列表；切换 user_id、username 或 profile_url 时请清空 page_token 后从第一页重新获取。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 用户 ID 获取公开用户帖子列表；已有完整 user_id 时直接使用，支持 page_token 翻页。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_user_posts_by_username",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "description": "X 用户名；推荐从搜索、详情、评论或评论回复结果的非空 author.username，或用户帖子列表结果的非空 author.username，或用户信息结果的非空 username 原样复制，该值不带 @；如果用户给的是 @username 也可以传；不要传用户主页链接、帖子链接或分享文案。",
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "X 用户帖子列表分页令牌。首次请求留空。继续翻页时必须将上一页返回的完整 next_page_token 原样作为 page_token 传回；page_token 是不透明分页令牌；不得修改、截断、缩写、脱敏、掩码、省略、规范化、重组或自行生成，不得用省略号替换中间内容。只能用于同一用户帖子列表；切换 user_id、username 或 profile_url 时请清空 page_token 后从第一页重新获取。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 用户名获取公开用户帖子列表；可直接使用结果里的非空 author.username，支持 page_token 翻页。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_user_posts_by_profile_url",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "profile_url": {
+            "description": "X 用户主页链接；从搜索、详情、评论或评论回复结果的非空 author.profile_url，或用户帖子列表结果的非空 author.profile_url，或用户信息结果的非空 profile_url 原样复制；也可传用户提供的 x.com 或 twitter.com 用户主页链接；不要传帖子链接、评论链接、帖子正文里的链接、搜索关键词或接口地址。",
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "X 用户帖子列表分页令牌。首次请求留空。继续翻页时必须将上一页返回的完整 next_page_token 原样作为 page_token 传回；page_token 是不透明分页令牌；不得修改、截断、缩写、脱敏、掩码、省略、规范化、重组或自行生成，不得用省略号替换中间内容。只能用于同一用户帖子列表；切换 user_id、username 或 profile_url 时请清空 page_token 后从第一页重新获取。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "profile_url"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 用户主页链接获取公开用户帖子列表；可直接使用结果里的非空 author.profile_url，不要传帖子链接，支持 page_token 翻页。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "socialdatax_get_points_balance",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      },
+      "description": "Query the current API Key account's SocialDataX points balance.",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    }
+  ],
+  "tags": [
+    "mcp",
+    "mcp-server",
+    "social-media",
+    "socialdatax",
+    "social-insights"
+  ]
+}
