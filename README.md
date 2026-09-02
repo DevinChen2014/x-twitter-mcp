@@ -11,17 +11,17 @@ This public listing provides connection metadata and client examples for the hos
 - Website and API Key access: <https://socialdatax.com/ai?from=github>
 - Registry name: `com.52choujiang/x-insights`
 - Future registry name: `com.socialdatax/x-insights`
-- Current public capability version: `0.1.0`
+- Current public capability version: `0.1.1`. The hosted production server card and `tools/list` are live at `0.1.1` with 16 tools. The official Registry latest remains `0.1.0` pending publication of `0.1.1`.
 
 ## Scope
 
-Use this service for public X / Twitter post search, post details, first-level comments, comment replies, public user info, and user posts. It does not provide account login, posting, editing, liking, commenting, following, or other account actions.
+Use this service for public X / Twitter post search, post details, first-level comments, comment replies, public user info, user posts, and video speech-to-text. It does not provide account login, posting, editing, liking, commenting, following, or other account actions.
 
 ## Tools
 
 | Tool | Purpose |
 | --- | --- |
-| `socialdatax_get_points_balance` | Query the current API Key account balance. |
+| `socialdatax_get_points_balance` | Query the current API Key account's SocialDataX points balance / 积分余额、剩余积分或点数. |
 | `x_search_posts` | Search public posts; use when a search term is available, and continue with `page_token`. |
 | `x_get_post_detail_by_post_id` | Read post details from a post ID. |
 | `x_get_post_detail_by_post_url` | Read post details from a post URL. |
@@ -34,6 +34,9 @@ Use this service for public X / Twitter post search, post details, first-level c
 | `x_get_user_posts_by_user_id` | Read public user posts from a user ID. |
 | `x_get_user_posts_by_username` | Read public user posts from a username. |
 | `x_get_user_posts_by_profile_url` | Read public user posts from a profile URL. |
+| `x_submit_video_speech_text_by_post_url` | Submit the current post's first video with an available MP4 variant for speech-to-text by post URL. |
+| `x_submit_video_speech_text_by_post_id` | Submit the current post's first video with an available MP4 variant for speech-to-text by post ID. |
+| `x_get_video_speech_text_job` | Continue querying the same speech-to-text job ID until terminal. |
 
 When a post ID, post URL, username, or profile URL is already available, use the corresponding detail, comment, user, or user-post tool instead of searching again.
 
