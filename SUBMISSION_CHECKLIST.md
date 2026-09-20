@@ -17,7 +17,7 @@
 
 - No real API Key, private backend code, production configuration, internal sample, or account data is present.
 - `server-card.json` and `registry/x/server.json` use public capability version `0.1.1` and the same endpoint.
-- The hosted server card is live at `0.1.1` with 16 tools. The official Registry latest remains `0.1.0` until publication; verify the public repository sync and Registry publication as separate steps.
+- The hosted server card, public GitHub repository, and official Registry are live at `0.1.1` with 16 tools.
 - The hosted card must expose `x_search_posts`, `x_get_post_detail_by_post_url`, `x_get_post_comments_by_post_url`, `x_get_user_info_by_profile_url`, `x_submit_video_speech_text_by_post_url`, `x_submit_video_speech_text_by_post_id`, and `x_get_video_speech_text_job`.
 - Search and list calls pass the opaque `page_token` returned by the service for continuation.
 - `examples/codex_config.toml` uses `bearer_token_env_var = "SOCIALDATAX_API_KEY"`.
