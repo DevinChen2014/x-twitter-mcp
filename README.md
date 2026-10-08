@@ -11,17 +11,20 @@ This public listing provides connection metadata and client examples for the hos
 - Website and API Key access: <https://socialdatax.com/ai?from=github>
 - Registry name: `com.52choujiang/x-insights`
 - Future registry name: `com.socialdatax/x-insights`
-- Current public capability version: `0.1.1`. The hosted production server card, `tools/list`, public GitHub repository, and official Registry are all at `0.1.1` with 16 tools.
+- Current public capability version: `0.1.3`, 18 tools, including user search; hosted server card and authenticated tools/list verified on 2026-10-08.
+- Official Registry: publishing `0.1.3` succeeded on 2026-10-08; the latest/active read-back is pending because the Registry query timed out. Last verified latest was `0.1.1`.
 
 ## Scope
 
-Use this service for public X / Twitter post search, post details, first-level comments, comment replies, public user info, user posts, and video speech-to-text. It does not provide account login, posting, editing, liking, commenting, following, or other account actions.
+Use this service for public X / Twitter post search, user search, post details, first-level comments, comment replies, public user info, user posts, and video speech-to-text. It does not provide account login, posting, editing, liking, commenting, following, or other account actions.
 
 ## Tools
 
 | Tool | Purpose |
 | --- | --- |
 | `socialdatax_get_points_balance` | Query the current API Key account's SocialDataX points balance / 积分余额、剩余积分或点数. |
+| `x_search_users` | Search users by name or keyword; continue with `page_token` and the same keyword. |
+| `x_search_suggestions` | Get keyword suggestions for post search; no pagination or recommended users. |
 | `x_search_posts` | Search public posts; use when a search term is available, and continue with `page_token`. |
 | `x_get_post_detail_by_post_id` | Read post details from a post ID. |
 | `x_get_post_detail_by_post_url` | Read post details from a post URL. |

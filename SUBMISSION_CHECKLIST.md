@@ -4,21 +4,21 @@
 
 - Registry name: `com.52choujiang/x-insights`
 - Future registry name: `com.socialdatax/x-insights`
-- Version: `0.1.1`
+- Hosted and public repository capability version: `0.1.3`
 - Endpoint: `https://mcp.socialdatax.com/x/mcp`
 - Auth: `Authorization: Bearer <SOCIALDATAX_API_KEY>`
 - Website and API Key access: <https://socialdatax.com/ai?from=github>
 - Transport: hosted `streamable-http`; command/stdio fallback uses `mcp-remote`
 - License: MIT for public documentation and configuration examples only
 - Product: `SocialDataX` / `社媒数据助手`
-- current 16 public tools are listed in `server-card.json`.
+- 18 public tools are listed in `server-card.json`.
 
 ## Safety and publication checks
 
 - No real API Key, private backend code, production configuration, internal sample, or account data is present.
-- `server-card.json` and `registry/x/server.json` use public capability version `0.1.1` and the same endpoint.
-- The hosted server card, public GitHub repository, and official Registry are live at `0.1.1` with 16 tools.
-- The hosted card must expose `x_search_posts`, `x_get_post_detail_by_post_url`, `x_get_post_comments_by_post_url`, `x_get_user_info_by_profile_url`, `x_submit_video_speech_text_by_post_url`, `x_submit_video_speech_text_by_post_id`, and `x_get_video_speech_text_job`.
+- `server-card.json` and `registry/x/server.json` use public capability version `0.1.3` and the same endpoint.
+- Hosted `0.1.3`, 18 tools and authenticated tools/list verified on 2026-10-08; live user search returned 20 accounts. Registry publication of `0.1.3` succeeded, but latest/active read-back timed out and remains pending.
+- The hosted card must expose `x_search_users`, `x_search_suggestions`, `x_search_posts`, `x_get_post_detail_by_post_url`, `x_get_post_comments_by_post_url`, `x_get_user_info_by_profile_url`, `x_submit_video_speech_text_by_post_url`, `x_submit_video_speech_text_by_post_id`, and `x_get_video_speech_text_job`.
 - Search and list calls pass the opaque `page_token` returned by the service for continuation.
 - `examples/codex_config.toml` uses `bearer_token_env_var = "SOCIALDATAX_API_KEY"`.
 - `examples/cursor_mcp.json` uses the remote URL and `${env:SOCIALDATAX_API_KEY}`.
