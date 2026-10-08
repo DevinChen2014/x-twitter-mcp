@@ -12,7 +12,7 @@ This public listing provides connection metadata and client examples for the hos
 - Registry name: `com.52choujiang/x-insights`
 - Future registry name: `com.socialdatax/x-insights`
 - Current public capability version: `0.1.3`, 18 tools, including user search; hosted server card and authenticated tools/list verified on 2026-10-08.
-- Official Registry: publishing `0.1.3` succeeded on 2026-10-08; the latest/active read-back is pending because the Registry query timed out. Last verified latest was `0.1.1`.
+- Official Registry: [`0.1.3`](https://registry.modelcontextprotocol.io/v0.1/servers/com.52choujiang%2Fx-insights/versions/0.1.3), verified active and latest on 2026-10-08.
 
 ## Scope
 
