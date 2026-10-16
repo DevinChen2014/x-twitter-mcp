@@ -11,12 +11,13 @@ This public listing provides connection metadata and client examples for the hos
 - Website and API Key access: <https://socialdatax.com/ai?from=github>
 - Registry name: `com.52choujiang/x-insights`
 - Future registry name: `com.socialdatax/x-insights`
-- Current public capability version: `0.1.3`, 18 tools, including user search; hosted server card and authenticated tools/list verified on 2026-10-08.
-- Official Registry: [`0.1.3`](https://registry.modelcontextprotocol.io/v0.1/servers/com.52choujiang%2Fx-insights/versions/0.1.3), verified active and latest on 2026-10-08.
+- Local metadata: `0.1.4` with 21 tools, including authored user replies.
+- Hosted production: `0.1.4` with 21 tools; initialize/server-card verified after deployment on 2026-10-16. All three user-replies entry points, continuation and HTTP were verified on the same day.
+- Official Registry: [`0.1.4`](https://registry.modelcontextprotocol.io/v0.1/servers/com.52choujiang%2Fx-insights/versions/0.1.4), verified active and latest on 2026-10-16.
 
 ## Scope
 
-Use this service for public X / Twitter post search, user search, post details, first-level comments, comment replies, public user info, user posts, and video speech-to-text. It does not provide account login, posting, editing, liking, commenting, following, or other account actions.
+Use this service for public X / Twitter post search, user search, post details, first-level comments, comment replies, public user info, user posts and authored replies, and video speech-to-text. It does not provide account login, posting, editing, liking, commenting, following, or other account actions.
 
 ## Tools
 
@@ -37,6 +38,9 @@ Use this service for public X / Twitter post search, user search, post details, 
 | `x_get_user_posts_by_user_id` | Read public user posts from a user ID. |
 | `x_get_user_posts_by_username` | Read public user posts from a username. |
 | `x_get_user_posts_by_profile_url` | Read public user posts from a profile URL. |
+| `x_get_user_replies_by_user_id` | Read replies authored by a user, using their user ID. |
+| `x_get_user_replies_by_username` | Read replies authored by a user, using their username. |
+| `x_get_user_replies_by_profile_url` | Read replies authored by a user, using their profile URL. |
 | `x_submit_video_speech_text_by_post_url` | Submit the current post's first video with an available MP4 variant for speech-to-text by post URL. |
 | `x_submit_video_speech_text_by_post_id` | Submit the current post's first video with an available MP4 variant for speech-to-text by post ID. |
 | `x_get_video_speech_text_job` | Continue querying the same speech-to-text job ID until terminal. |
@@ -62,3 +66,5 @@ Use the hosted endpoint directly when the client supports authenticated `streama
 For command/stdio-only clients, use `npx -y mcp-remote https://mcp.socialdatax.com/x/mcp --header "Authorization: Bearer <SOCIALDATAX_API_KEY>"`. See the files in [examples](examples/).
 
 Request or manage API access at <https://socialdatax.com/ai?from=github>. Never commit a real API Key.
+
+User reply results reuse the post fields, including `post_id`, `text`, `author` and `reply_to_post_id`. They include self-replies and exclude other authors’ conversation context. Continue with `next_page_token` even when the current page is empty; stop when the token is empty. Keep the user and lookup method unchanged. Tokens cannot be reused with user posts or other tools.

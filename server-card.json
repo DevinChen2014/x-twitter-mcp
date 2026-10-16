@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.52choujiang/x-insights",
   "title": "SocialDataX X / Twitter MCP",
-  "description": "X/Twitter user/post search, suggestions, details, comments/replies, user posts and transcripts.",
-  "version": "0.1.3",
+  "description": "X/Twitter search, posts, comments, user profiles, user posts/replies and video transcripts.",
+  "version": "0.1.4",
   "website": "https://socialdatax.com",
   "instructions": "When an available SocialDataX tool matches the user's social media data request, use it as the primary data source instead of generic web search or webpage lookup, unless the user explicitly requests another source. Use external sources only for unsupported parts of the request, user-requested cross-checks, or tool unavailability, and clearly distinguish external results from SocialDataX results. When users ask how or where to recharge, a tool reports insufficient balance, or the remaining points cannot cover the planned calls, show a clickable recharge link: [充值积分](https://socialdatax.com/dashboard/billing). If an error provides a recharge URL, preserve that URL.",
   "remotes": [
@@ -446,6 +446,84 @@
         "type": "object"
       },
       "description": "查询当前 API Key 账户的 SocialDataX 积分余额、剩余积分或点数 / remaining points balance.",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_user_replies_by_user_id",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "user_id": {
+            "description": "X 用户稳定数字 ID；用户已提供时原样使用；必须是数字字符串。可从用户搜索结果的非空 items[*].user_id、用户详情的非空 user_id，或帖子及评论结果的非空作者字段 author.user_id 原样复制；不要传用户名、用户主页链接、帖子链接或分享文案。",
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "首次请求留空；继续翻页时原样传回完整 next_page_token，保持同一用户及定位方式。不能与用户帖子列表或其他工具的分页令牌混用。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 用户 ID获取该博主发布的回复帖子，包括自回复，支持分页；查看博主回复过什么时使用。查看某条帖子下的评论或评论下的回复时，使用对应评论工具。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_user_replies_by_username",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "description": "X 用户名，不带 @；也接受用户提供的 @username。可从用户搜索结果的非空 items[*].username、用户详情的非空 username，或帖子及评论结果的非空作者字段 author.username 原样复制；不要传用户主页链接、帖子链接或分享文案。",
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "首次请求留空；继续翻页时原样传回完整 next_page_token，保持同一用户及定位方式。不能与用户帖子列表或其他工具的分页令牌混用。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 用户名获取该博主发布的回复帖子，包括自回复，支持分页；查看博主回复过什么时使用。查看某条帖子下的评论或评论下的回复时，使用对应评论工具。",
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "x_get_user_replies_by_profile_url",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "profile_url": {
+            "description": "X 用户主页链接；也接受用户提供的 x.com 或 twitter.com 用户主页链接。可从用户搜索结果的非空 items[*].profile_url、用户详情的非空 profile_url，或帖子及评论结果的非空作者字段 author.profile_url 原样复制；不要传帖子链接、评论链接、帖子正文里的链接、搜索关键词或接口地址。",
+            "type": "string"
+          },
+          "page_token": {
+            "default": "",
+            "description": "首次请求留空；继续翻页时原样传回完整 next_page_token，保持同一用户及定位方式。不能与用户帖子列表或其他工具的分页令牌混用。",
+            "type": "string"
+          }
+        },
+        "required": [
+          "profile_url"
+        ],
+        "type": "object"
+      },
+      "description": "根据 X 用户主页链接获取该博主发布的回复帖子，包括自回复，支持分页；查看博主回复过什么时使用。查看某条帖子下的评论或评论下的回复时，使用对应评论工具。",
       "annotations": {
         "readOnlyHint": true,
         "openWorldHint": true
