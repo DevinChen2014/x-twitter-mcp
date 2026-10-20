@@ -70,3 +70,19 @@ For command/stdio-only clients, use `npx -y mcp-remote https://mcp.socialdatax.c
 Request or manage API access at <https://socialdatax.com/ai?from=github>. Never commit a real API Key.
 
 User reply results reuse the post fields, including `post_id`, `text`, `author` and `reply_to_post_id`. They include self-replies and exclude other authors’ conversation context. Continue with `next_page_token` even when the current page is empty; stop when the token is empty. Keep the user and lookup method unchanged. Tokens cannot be reused with user posts or other tools.
+
+## Gemini CLI extension
+
+Install this service from its public GitHub repository:
+
+```sh
+gemini extensions install https://github.com/DevinChen2014/x-twitter-mcp
+```
+
+When prompted, enter your own `SOCIALDATAX_API_KEY`. Get a key from [SocialDataX](https://socialdatax.com/ai?from=github); business tool calls consume SocialDataX credits. The extension connects directly to the existing hosted MCP endpoint and does not include the private service implementation.
+
+Verify the connection with `gemini mcp list`. To change the saved key, run:
+
+```sh
+gemini extensions config socialdatax-x
+```
